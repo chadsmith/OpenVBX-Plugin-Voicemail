@@ -1,6 +1,6 @@
 {
     "name" : "Check Voicemail",
     "author" : "Chad Smith <chad@nospam.me>",
-    "description" : "Check your OpenVBX voicemail.",
+    "description" : "OpenVBX voicemail retrieval.",
     "url" : "http://twitter.com/chadsmith"
 }

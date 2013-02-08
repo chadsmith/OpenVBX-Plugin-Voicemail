@@ -12,7 +12,7 @@ class TwimlVoicemail {
 		$this->state = $ci->session->userdata($this->cookie_name);
 		$this->messages = $ci->session->userdata($this->cookie_name . '_messages');
 	}
-	
+
 	public function respond() {
 		$this->response->respond();
 	}

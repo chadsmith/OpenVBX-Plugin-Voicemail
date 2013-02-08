@@ -7,17 +7,27 @@ $vm = new TwimlVoicemail();
 $digits = clean_digits($ci->input->get_post('Digits'));
 
 if($digits !== false):
-  if($digits == '7'):
+  if($digits == '5'):
+    $vm->response->say(date('l, F jS, Y \a\t g:ia', strtotime($vm->messages[0]->created) + date('Z')));
+  elseif($digits == '7'):
     $ci->vbx_message->archive($vm->messages[0]->id, $ci->tenant->id, true);
     array_shift($vm->messages);
     $vm->response->say('Message deleted.');
+  elseif($digits == '8'):
+    $ci->vbx_message->mark_read($vm->messages[0]->id, $ci->tenant->id);
+    $vm->response->dial($vm->messages[0]->caller, array(
+			'callerId' => $vm->messages[0]->called
+		));
+		array_shift($vm->messages);
   elseif($digits == '9'):
     $ci->vbx_message->mark_read($vm->messages[0]->id, $ci->tenant->id);
     array_shift($vm->messages);
     $vm->response->say('Message saved.');
-  elseif($digits == '4'):
+  elseif($digits == '*'):
     $vm->response->say('Goodbye.');
     $vm->set_state('exit');
+  elseif($digits == ''):
+    array_shift($vm->messages);
   endif;
   $vm->save_state();
   $vm->response->redirect();
