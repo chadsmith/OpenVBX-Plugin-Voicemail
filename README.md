@@ -9,7 +9,7 @@ This plugin allows you to dial into your voicemail. Use it with my [Password][1]
 
 [Download][3] the plugin and extract to /plugins
 
-[2]: https://github.com/chadsmith/OpenVBX-Plugin-Voicemail/archives/master
+[3]: https://github.com/chadsmith/OpenVBX-Plugin-Voicemail/archives/master
 
 ## Usage
 
