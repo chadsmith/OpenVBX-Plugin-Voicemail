@@ -1,5 +1,0 @@
-{
-	"name" : "Check Voicemail",
-	"description" : "Check your OpenVBX voicemail from a flow.",
-  "type" : "voice"
-}

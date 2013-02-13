@@ -1,0 +1,5 @@
+{
+	"name" : "Retrieve Voicemail",
+	"description" : "Retrieve the caller's OpenVBX voicemail from a flow.",
+  "type" : "voice"
+}

@@ -1,6 +1,6 @@
 # Voicemail Retrieval for OpenVBX
 
-This plugin allows you to call into your voicemail. Use it with my [Password][1] or [Routing][2] plugins for added security.
+This plugin allows you to call into your voicemail. Try it with my [Password][1] or [Routing][2] plugins for additional security.
 
 [1]: https://github.com/chadsmith/OpenVBX-Plugin-Password
 [2]: https://github.com/chadsmith/OpenVBX-Plugin-Routes
@@ -13,7 +13,16 @@ This plugin allows you to call into your voicemail. Use it with my [Password][1]
 
 ## Usage
 
-1. Add the Check Voicemail applet to a Call flow
+### Authenticated Retrieval
+
+1. Add the Retrieve Voicemail applet to a Call flow
+2. Select the mailbox type (user or group)
+3. (Optional) Drop an applet for when the mailbox is exited
+4. (Optional) Drop an applet for when the caller is not an OpenVBX user or a member of the selected group
+
+### Unauthenticated Retrieval
+
+1. Add the Retrieve Voicemail (unlocked) applet to a Call flow
 2. Select the mailbox you want to call into
 3. (Optional) Drop an applet for when the mailbox is exited
 
