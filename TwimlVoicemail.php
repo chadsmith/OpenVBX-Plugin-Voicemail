@@ -2,6 +2,7 @@
 class TwimlVoicemail {
 	protected $cookie_name;
 	protected $digits;
+	protected $prefs;
 	public $response;
 	public $state;
 	public $messages;
@@ -12,6 +13,10 @@ class TwimlVoicemail {
 		$this->cookie_name = 'state-' . AppletInstance::getInstanceId();
 		$this->state = $ci->session->userdata($this->cookie_name);
 		$this->messages = $ci->session->userdata($this->cookie_name . '_messages');
+		$this->prefs = array(
+      'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
+      'voice_language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
+    );
 	}
 
 	public function respond() {
@@ -65,7 +70,7 @@ class TwimlVoicemail {
   }
 
 	protected function menu_timestamp() {
-	  $this->response->say(date('l, F jS, Y \a\t g:ia', strtotime($this->messages[0]->created) + date('Z')));
+	  $this->response->say(date('l, F jS, Y \a\t g:ia', strtotime($this->messages[0]->created) + date('Z')), $this->prefs);
 	}
 
 	protected function menu_archive_message() {
@@ -73,7 +78,7 @@ class TwimlVoicemail {
     $ci->load->model('vbx_message');
     $ci->vbx_message->archive($this->messages[0]->id, $ci->tenant->id, true);
     array_shift($this->messages);
-    $this->response->say('Message deleted.');
+    $this->response->say('Message deleted.', $this->prefs);
 	}
 
 	protected function menu_return_call() {
@@ -91,11 +96,11 @@ class TwimlVoicemail {
     $ci->load->model('vbx_message');
     $ci->vbx_message->mark_read($this->messages[0]->id, $ci->tenant->id);
     array_shift($this->messages);
-    $this->response->say('Message saved.');
+    $this->response->say('Message saved.', $this->prefs);
 	}
 
 	protected function menu_exit() {
-    $this->response->say('Goodbye.');
+    $this->response->say('Goodbye.', $this->prefs);
     $this->set_state('exit');
 	}
 
@@ -130,14 +135,14 @@ class TwimlVoicemail {
         $saved_messages++;
     if($new_messages || $saved_messages):
       if($new_messages && $saved_messages)
-        $this->response->say(sprintf('You have %s new message%s and %d saved message%s.', $new_messages, $new_messages != 1 ? 's' : '', $saved_messages, $saved_messages != 1 ? 's' : ''));
+        $this->response->say(sprintf('You have %s new message%s and %d saved message%s.', $new_messages, $new_messages != 1 ? 's' : '', $saved_messages, $saved_messages != 1 ? 's' : ''), $this->prefs);
       elseif($new_messages) 
-        $this->response->say(sprintf('You have %d new message%s.', $new_messages, $new_messages != 1 ? 's' : ''));
+        $this->response->say(sprintf('You have %d new message%s.', $new_messages, $new_messages != 1 ? 's' : ''), $this->prefs);
       else
-        $this->response->say(sprintf('You have %d saved message%s.', $saved_messages, $saved_messages != 1 ? 's' : ''));
+        $this->response->say(sprintf('You have %d saved message%s.', $saved_messages, $saved_messages != 1 ? 's' : ''), $this->prefs);
       $this->set_state('queue');
     else:
-      $this->response->say('You have no messages.');
+      $this->response->say('You have no messages.', $this->prefs);
       $this->set_state('exit');
     endif;
     $this->save_state();
@@ -158,11 +163,11 @@ class TwimlVoicemail {
     if(count($this->messages)):
       $message = $this->messages[0];
       $gather = $this->response->gather(array('numDigits' => 1));
-      $gather->say(sprintf('%s message.', $message->status == 'new' ? 'New' : 'Saved'));
+      $gather->say(sprintf('%s message.', $message->status == 'new' ? 'New' : 'Saved'), $this->prefs);
       $gather->play($message->content_url);
-      $gather->say('To delete, press 7. To save, press 9.');
+      $gather->say('To delete, press 7. To save, press 9.', $this->prefs);
     else:
-      $this->response->say('You have no more messages.');
+      $this->response->say('You have no more messages.', $this->prefs);
       $this->set_state('exit');
       $this->save_state();
       $this->response->redirect();
