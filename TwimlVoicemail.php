@@ -15,7 +15,7 @@ class TwimlVoicemail {
 		$this->messages = $ci->session->userdata($this->cookie_name . '_messages');
 		$this->prefs = array(
       'voice' => $ci->vbx_settings->get('voice', $ci->tenant->id),
-      'voice_language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
+      'language' => $ci->vbx_settings->get('voice_language', $ci->tenant->id)
     );
 	}
 
